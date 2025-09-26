@@ -1,4 +1,3 @@
-
 const translations = {
   ar: {
     title: "🔐 مساعد كلمة المرور",
@@ -74,17 +73,14 @@ const translations = {
   }
 };
 
-
 let currentLang = localStorage.getItem("lang") || "ar";
-
 
 function toggleLanguage() {
   currentLang = currentLang === "ar" ? "en" : "ar";
-  localStorage.setItem("lang", currentLang); // تخزين اللغة
+  localStorage.setItem("lang", currentLang);
   applyTranslations(currentLang);
   document.getElementById("langBtn").innerText = currentLang === "ar" ? "English" : "Arabic";
 }
-
 
 function applyTranslations(lang) {
   document.querySelector("h2").innerText = translations[lang].title;
@@ -108,7 +104,6 @@ function applyTranslations(lang) {
   document.getElementById("result").innerText = translations[lang].result;
   document.getElementById("suggestions").innerText = "";
 
-  
   if (lang === "ar") {
     document.body.style.direction = "rtl";
     document.querySelector(".rules").style.textAlign = "right";
@@ -124,8 +119,6 @@ window.onload = () => {
   applyTranslations(currentLang);
   document.getElementById("langBtn").innerText = currentLang === "ar" ? "English" : "Arabic";
 };
-
-
 
 function generatePassword() {
   const upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -168,8 +161,18 @@ function checkPassword() {
     if (!hasLower) suggestions.push(translations[currentLang].improve.lower);
     if (!hasNumber) suggestions.push(translations[currentLang].improve.number);
     if (!hasSymbol) suggestions.push(translations[currentLang].improve.symbol);
+
+    document.getElementById("saveBtn").style.display = "none";
+
   } else if (hasUpper && hasLower && hasNumber && hasSymbol && pw.length > 8) {
     strength = translations[currentLang].strength.strong;
+
+  
+    document.getElementById("saveBtn").style.display = "inline-block";
+
+    
+    document.getElementById("generated").innerText = translations[currentLang].generated + pw;
+
   } else {
     strength = translations[currentLang].strength.medium;
     if (pw.length <= 8) suggestions.push(translations[currentLang].improve.length8);
@@ -177,6 +180,8 @@ function checkPassword() {
     if (!hasLower) suggestions.push(translations[currentLang].improve.lower);
     if (!hasNumber) suggestions.push(translations[currentLang].improve.number);
     if (!hasSymbol) suggestions.push(translations[currentLang].improve.symbol);
+
+    document.getElementById("saveBtn").style.display = "none";
   }
 
   document.getElementById("result").innerText = "💬 " + strength;
@@ -209,12 +214,9 @@ function showSavedPasswords() {
 
   if (savedPasswords.length === 0) {
     container.innerHTML = translations[currentLang].savedEmpty;
-
-  
     setTimeout(() => {
       container.innerHTML = "";
     }, 2000);
-
     return;
   }
 
@@ -252,7 +254,6 @@ function deletePassword(index) {
 
 function clearAllPasswords() {
   let savedPasswords = JSON.parse(localStorage.getItem("savedPasswords")) || [];
-
   if (savedPasswords.length === 0) {
     document.getElementById("savedList").innerText = translations[currentLang].savedEmpty;
     setTimeout(() => {
@@ -263,7 +264,6 @@ function clearAllPasswords() {
 
   localStorage.removeItem("savedPasswords");
   document.getElementById("savedList").innerText = translations[currentLang].savedCleared;
-
   setTimeout(() => {
     document.getElementById("savedList").innerText = "";
   }, 2000);
